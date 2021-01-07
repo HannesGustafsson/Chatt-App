@@ -10,6 +10,7 @@ namespace BackendChattApp
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("Hello World!");
         }
     }
 }
