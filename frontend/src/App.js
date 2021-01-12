@@ -1,8 +1,10 @@
+import Log from "./Log" 
 
-function App() {
+const App = () => {
   return (
-    <div>hej världen</div>
-
+    <div>
+    <Log/>
+    </div>
   );
 }
 
