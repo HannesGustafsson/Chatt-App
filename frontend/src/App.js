@@ -1,9 +1,15 @@
+import Log from "./Log"
+import Input from "./Input"
 
 const App = () => {
   return (
-    <div>hej världen</div>
+    <div>
+      <Log/>
+      <Input/>
+    </div>
 
   );
 }
 
 export default App;
+
