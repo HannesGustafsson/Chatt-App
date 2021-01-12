@@ -10,8 +10,9 @@ top: 20%;
 left: 20%;
 position: relative;
 width: 300px;
+height: 70%;
+max-height: 1000px;
 padding: 50px;
-height: 600px;
 background: #f2ffe5;
 `
 const Log = () => {
