@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net; //added
 using System.Net.Sockets; //added
+using Google.Protobuf;
 
 namespace BackendChattApp
 {

@@ -23,19 +23,19 @@ public static partial class MessageReflection {
     byte[] descriptorData = global::System.Convert.FromBase64String(
         string.Concat(
           "Cg1NZXNzYWdlLnByb3RvIkYKDU1lc3NhZ2VPYmplY3QSDQoFYWxpYXMYASAB",
-          "KAkSEwoLbWVzc2FnZVRleHQYAiABKAkSEQoJdGltZXN0YW1wGAMgASgDIicK",
-          "EkdldE1lc3NhZ2VzUmVxdWVzdBIRCgl0aW1lc3RhbXAYASABKAMiOgoTR2V0",
-          "TWVzc2FnZXNSZXNwb25zZRIjCgttZXNzYWdlTGlzdBgBIAMoCzIOLk1lc3Nh",
-          "Z2VPYmplY3QiSQoMSW5wdXRNZXNzYWdlEhEKCWlwQWRkcmVzcxgBIAEoCRIm",
-          "Cg5tZXNzYWdlVG9JbnB1dBgCIAEoCzIOLk1lc3NhZ2VPYmplY3RiBnByb3Rv",
-          "Mw=="));
+          "KAkSEwoLbWVzc2FnZVRleHQYAiABKAkSEQoJdGltZXN0YW1wGAMgASgDIjoK",
+          "E0dldE1lc3NhZ2VzUmVzcG9uc2USIwoLbWVzc2FnZUxpc3QYASADKAsyDi5N",
+          "ZXNzYWdlT2JqZWN0IkkKDElucHV0TWVzc2FnZRIRCglpcEFkZHJlc3MYASAB",
+          "KAkSJgoObWVzc2FnZVRvSW5wdXQYAiABKAsyDi5NZXNzYWdlT2JqZWN0IlIK",
+          "DkJhY2tlbmRSZXF1ZXN0Eg8KB2lzSW5wdXQYASABKAgSHAoFaW5wdXQYAiAB",
+          "KAsyDS5JbnB1dE1lc3NhZ2USEQoJdGltZXN0YW1wGAMgASgDYgZwcm90bzM="));
     descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
         new pbr::FileDescriptor[] { },
         new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
           new pbr::GeneratedClrTypeInfo(typeof(global::MessageObject), global::MessageObject.Parser, new[]{ "Alias", "MessageText", "Timestamp" }, null, null, null, null),
-          new pbr::GeneratedClrTypeInfo(typeof(global::GetMessagesRequest), global::GetMessagesRequest.Parser, new[]{ "Timestamp" }, null, null, null, null),
           new pbr::GeneratedClrTypeInfo(typeof(global::GetMessagesResponse), global::GetMessagesResponse.Parser, new[]{ "MessageList" }, null, null, null, null),
-          new pbr::GeneratedClrTypeInfo(typeof(global::InputMessage), global::InputMessage.Parser, new[]{ "IpAddress", "MessageToInput" }, null, null, null, null)
+          new pbr::GeneratedClrTypeInfo(typeof(global::InputMessage), global::InputMessage.Parser, new[]{ "IpAddress", "MessageToInput" }, null, null, null, null),
+          new pbr::GeneratedClrTypeInfo(typeof(global::BackendRequest), global::BackendRequest.Parser, new[]{ "IsInput", "Input", "Timestamp" }, null, null, null, null)
         }));
   }
   #endregion
@@ -290,181 +290,6 @@ public sealed partial class MessageObject : pb::IMessage<MessageObject>
 }
 
 /// <summary>
-/// Request för att hämta meddelanden
-/// </summary>
-public sealed partial class GetMessagesRequest : pb::IMessage<GetMessagesRequest>
-#if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    , pb::IBufferMessage
-#endif
-{
-  private static readonly pb::MessageParser<GetMessagesRequest> _parser = new pb::MessageParser<GetMessagesRequest>(() => new GetMessagesRequest());
-  private pb::UnknownFieldSet _unknownFields;
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  public static pb::MessageParser<GetMessagesRequest> Parser { get { return _parser; } }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  public static pbr::MessageDescriptor Descriptor {
-    get { return global::MessageReflection.Descriptor.MessageTypes[1]; }
-  }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  pbr::MessageDescriptor pb::IMessage.Descriptor {
-    get { return Descriptor; }
-  }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  public GetMessagesRequest() {
-    OnConstruction();
-  }
-
-  partial void OnConstruction();
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  public GetMessagesRequest(GetMessagesRequest other) : this() {
-    timestamp_ = other.timestamp_;
-    _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-  }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  public GetMessagesRequest Clone() {
-    return new GetMessagesRequest(this);
-  }
-
-  /// <summary>Field number for the "timestamp" field.</summary>
-  public const int TimestampFieldNumber = 1;
-  private long timestamp_;
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  public long Timestamp {
-    get { return timestamp_; }
-    set {
-      timestamp_ = value;
-    }
-  }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  public override bool Equals(object other) {
-    return Equals(other as GetMessagesRequest);
-  }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  public bool Equals(GetMessagesRequest other) {
-    if (ReferenceEquals(other, null)) {
-      return false;
-    }
-    if (ReferenceEquals(other, this)) {
-      return true;
-    }
-    if (Timestamp != other.Timestamp) return false;
-    return Equals(_unknownFields, other._unknownFields);
-  }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  public override int GetHashCode() {
-    int hash = 1;
-    if (Timestamp != 0L) hash ^= Timestamp.GetHashCode();
-    if (_unknownFields != null) {
-      hash ^= _unknownFields.GetHashCode();
-    }
-    return hash;
-  }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  public override string ToString() {
-    return pb::JsonFormatter.ToDiagnosticString(this);
-  }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  public void WriteTo(pb::CodedOutputStream output) {
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    output.WriteRawMessage(this);
-  #else
-    if (Timestamp != 0L) {
-      output.WriteRawTag(8);
-      output.WriteInt64(Timestamp);
-    }
-    if (_unknownFields != null) {
-      _unknownFields.WriteTo(output);
-    }
-  #endif
-  }
-
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-    if (Timestamp != 0L) {
-      output.WriteRawTag(8);
-      output.WriteInt64(Timestamp);
-    }
-    if (_unknownFields != null) {
-      _unknownFields.WriteTo(ref output);
-    }
-  }
-  #endif
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  public int CalculateSize() {
-    int size = 0;
-    if (Timestamp != 0L) {
-      size += 1 + pb::CodedOutputStream.ComputeInt64Size(Timestamp);
-    }
-    if (_unknownFields != null) {
-      size += _unknownFields.CalculateSize();
-    }
-    return size;
-  }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  public void MergeFrom(GetMessagesRequest other) {
-    if (other == null) {
-      return;
-    }
-    if (other.Timestamp != 0L) {
-      Timestamp = other.Timestamp;
-    }
-    _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-  }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  public void MergeFrom(pb::CodedInputStream input) {
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    input.ReadRawMessage(this);
-  #else
-    uint tag;
-    while ((tag = input.ReadTag()) != 0) {
-      switch(tag) {
-        default:
-          _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-          break;
-        case 8: {
-          Timestamp = input.ReadInt64();
-          break;
-        }
-      }
-    }
-  #endif
-  }
-
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-    uint tag;
-    while ((tag = input.ReadTag()) != 0) {
-      switch(tag) {
-        default:
-          _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-          break;
-        case 8: {
-          Timestamp = input.ReadInt64();
-          break;
-        }
-      }
-    }
-  }
-  #endif
-
-}
-
-/// <summary>
 /// Svar från backend för meddelanden med lista
 /// </summary>
 public sealed partial class GetMessagesResponse : pb::IMessage<GetMessagesResponse>
@@ -479,7 +304,7 @@ public sealed partial class GetMessagesResponse : pb::IMessage<GetMessagesRespon
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   public static pbr::MessageDescriptor Descriptor {
-    get { return global::MessageReflection.Descriptor.MessageTypes[2]; }
+    get { return global::MessageReflection.Descriptor.MessageTypes[1]; }
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -643,7 +468,7 @@ public sealed partial class InputMessage : pb::IMessage<InputMessage>
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   public static pbr::MessageDescriptor Descriptor {
-    get { return global::MessageReflection.Descriptor.MessageTypes[3]; }
+    get { return global::MessageReflection.Descriptor.MessageTypes[2]; }
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -839,6 +664,262 @@ public sealed partial class InputMessage : pb::IMessage<InputMessage>
             MessageToInput = new global::MessageObject();
           }
           input.ReadMessage(MessageToInput);
+          break;
+        }
+      }
+    }
+  }
+  #endif
+
+}
+
+/// <summary>
+/// Request send from client to backend
+/// </summary>
+public sealed partial class BackendRequest : pb::IMessage<BackendRequest>
+#if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    , pb::IBufferMessage
+#endif
+{
+  private static readonly pb::MessageParser<BackendRequest> _parser = new pb::MessageParser<BackendRequest>(() => new BackendRequest());
+  private pb::UnknownFieldSet _unknownFields;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public static pb::MessageParser<BackendRequest> Parser { get { return _parser; } }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public static pbr::MessageDescriptor Descriptor {
+    get { return global::MessageReflection.Descriptor.MessageTypes[3]; }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  pbr::MessageDescriptor pb::IMessage.Descriptor {
+    get { return Descriptor; }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public BackendRequest() {
+    OnConstruction();
+  }
+
+  partial void OnConstruction();
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public BackendRequest(BackendRequest other) : this() {
+    isInput_ = other.isInput_;
+    input_ = other.input_ != null ? other.input_.Clone() : null;
+    timestamp_ = other.timestamp_;
+    _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public BackendRequest Clone() {
+    return new BackendRequest(this);
+  }
+
+  /// <summary>Field number for the "isInput" field.</summary>
+  public const int IsInputFieldNumber = 1;
+  private bool isInput_;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public bool IsInput {
+    get { return isInput_; }
+    set {
+      isInput_ = value;
+    }
+  }
+
+  /// <summary>Field number for the "input" field.</summary>
+  public const int InputFieldNumber = 2;
+  private global::InputMessage input_;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public global::InputMessage Input {
+    get { return input_; }
+    set {
+      input_ = value;
+    }
+  }
+
+  /// <summary>Field number for the "timestamp" field.</summary>
+  public const int TimestampFieldNumber = 3;
+  private long timestamp_;
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public long Timestamp {
+    get { return timestamp_; }
+    set {
+      timestamp_ = value;
+    }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public override bool Equals(object other) {
+    return Equals(other as BackendRequest);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public bool Equals(BackendRequest other) {
+    if (ReferenceEquals(other, null)) {
+      return false;
+    }
+    if (ReferenceEquals(other, this)) {
+      return true;
+    }
+    if (IsInput != other.IsInput) return false;
+    if (!object.Equals(Input, other.Input)) return false;
+    if (Timestamp != other.Timestamp) return false;
+    return Equals(_unknownFields, other._unknownFields);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public override int GetHashCode() {
+    int hash = 1;
+    if (IsInput != false) hash ^= IsInput.GetHashCode();
+    if (input_ != null) hash ^= Input.GetHashCode();
+    if (Timestamp != 0L) hash ^= Timestamp.GetHashCode();
+    if (_unknownFields != null) {
+      hash ^= _unknownFields.GetHashCode();
+    }
+    return hash;
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public override string ToString() {
+    return pb::JsonFormatter.ToDiagnosticString(this);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public void WriteTo(pb::CodedOutputStream output) {
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    output.WriteRawMessage(this);
+  #else
+    if (IsInput != false) {
+      output.WriteRawTag(8);
+      output.WriteBool(IsInput);
+    }
+    if (input_ != null) {
+      output.WriteRawTag(18);
+      output.WriteMessage(Input);
+    }
+    if (Timestamp != 0L) {
+      output.WriteRawTag(24);
+      output.WriteInt64(Timestamp);
+    }
+    if (_unknownFields != null) {
+      _unknownFields.WriteTo(output);
+    }
+  #endif
+  }
+
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+    if (IsInput != false) {
+      output.WriteRawTag(8);
+      output.WriteBool(IsInput);
+    }
+    if (input_ != null) {
+      output.WriteRawTag(18);
+      output.WriteMessage(Input);
+    }
+    if (Timestamp != 0L) {
+      output.WriteRawTag(24);
+      output.WriteInt64(Timestamp);
+    }
+    if (_unknownFields != null) {
+      _unknownFields.WriteTo(ref output);
+    }
+  }
+  #endif
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public int CalculateSize() {
+    int size = 0;
+    if (IsInput != false) {
+      size += 1 + 1;
+    }
+    if (input_ != null) {
+      size += 1 + pb::CodedOutputStream.ComputeMessageSize(Input);
+    }
+    if (Timestamp != 0L) {
+      size += 1 + pb::CodedOutputStream.ComputeInt64Size(Timestamp);
+    }
+    if (_unknownFields != null) {
+      size += _unknownFields.CalculateSize();
+    }
+    return size;
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public void MergeFrom(BackendRequest other) {
+    if (other == null) {
+      return;
+    }
+    if (other.IsInput != false) {
+      IsInput = other.IsInput;
+    }
+    if (other.input_ != null) {
+      if (input_ == null) {
+        Input = new global::InputMessage();
+      }
+      Input.MergeFrom(other.Input);
+    }
+    if (other.Timestamp != 0L) {
+      Timestamp = other.Timestamp;
+    }
+    _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public void MergeFrom(pb::CodedInputStream input) {
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    input.ReadRawMessage(this);
+  #else
+    uint tag;
+    while ((tag = input.ReadTag()) != 0) {
+      switch(tag) {
+        default:
+          _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+          break;
+        case 8: {
+          IsInput = input.ReadBool();
+          break;
+        }
+        case 18: {
+          if (input_ == null) {
+            Input = new global::InputMessage();
+          }
+          input.ReadMessage(Input);
+          break;
+        }
+        case 24: {
+          Timestamp = input.ReadInt64();
+          break;
+        }
+      }
+    }
+  #endif
+  }
+
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+    uint tag;
+    while ((tag = input.ReadTag()) != 0) {
+      switch(tag) {
+        default:
+          _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+          break;
+        case 8: {
+          IsInput = input.ReadBool();
+          break;
+        }
+        case 18: {
+          if (input_ == null) {
+            Input = new global::InputMessage();
+          }
+          input.ReadMessage(Input);
+          break;
+        }
+        case 24: {
+          Timestamp = input.ReadInt64();
           break;
         }
       }
