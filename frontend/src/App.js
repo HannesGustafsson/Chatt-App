@@ -1,10 +1,9 @@
-import Log from "./Log"
-import MessageInput from "./Input"
+import Log from "./Log" 
+
 const App = () => {
   return (
     <div>
     <Log/>
-    <MessageInput/>
     </div>
   );
 }
