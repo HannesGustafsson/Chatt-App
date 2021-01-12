@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+// Mall för meddelandet
+message MessageObject{
+	string alias = 1;
+	string messageText = 2;
+	int64 timestamp = 3;
+}
+
+// Request för att hämta meddelanden
+message GetMessagesRequest{
+	int64 timestamp = 1;
+}
+
+// Svar från backend för meddelanden med lista
+message GetMessagesResponse{
+	repeated MessageObject messageList = 1;	
+}
+
+// Objekt för meddelande som ska läggas in i db
+message InputMessage{
+	string ipAddress = 1;
+	MessageObject messageToInput = 2;
+}
