@@ -38,16 +38,18 @@ namespace BackendChattApp
                         request = BackendRequest.Parser.ParseFrom(stream);
                         if (request.IsInput)
                         {
-                            AddMessage(request.Input);
+                            Console.WriteLine("Message recived adding to DB");
+                            AddMessage(request.Input);                            
                             tcpClient.Close();
                         }
                         else
                         {
                             GetMessagesResponse response = GetMessages(request.Timestamp);
-                            Console.Write("Waiting for a connection to transfer... ");
+                            Console.WriteLine("Waiting for a connection to transfer... ");
                             tcpClient = tcpListener.AcceptTcpClient();
 
                             response.WriteTo(tcpClient.GetStream());
+                            Console.WriteLine("Transfer Complete closing stream");
                             tcpClient.Close();
                         }
                     }
@@ -71,10 +73,12 @@ namespace BackendChattApp
         }
         static private void AddMessage(InputMessage message)
         {
+            Console.WriteLine("Adding message to DB");
             // adds message to DB
         }
         static private GetMessagesResponse GetMessages(Int64 timestamp)
         {
+            Console.WriteLine("Writing message to DB");
             // Retrives messages from DB
             return new GetMessagesResponse();
         }
