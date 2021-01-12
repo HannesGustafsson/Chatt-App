@@ -10,11 +10,9 @@ using Google.Protobuf;
 namespace BackendChattApp
 {
     class Program
-    {        
+    {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-
             ListenTCP();
         }
 
@@ -24,32 +22,39 @@ namespace BackendChattApp
             {
                 TcpListener tcpListener = new TcpListener(GetLocalIP(), 11000);
                 tcpListener.Start();
-                Byte[] bytes = new Byte[256];
-                string msgR = null;
 
                 while (true)
                 {
+                    BackendRequest request = new BackendRequest();
                     Console.Write("Waiting for a connection... ");
-
                     TcpClient tcpClient = tcpListener.AcceptTcpClient();
                     Console.WriteLine("Connected!");
-
-                    msgR = null;
-
                     NetworkStream stream = tcpClient.GetStream();
 
-                    int i;
+                    
 
-                    while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
+                    try
                     {
-                        msgR = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-                        Console.WriteLine("Recived: {0}", msgR);                        
+                        request = BackendRequest.Parser.ParseFrom(stream);
+                        if (request.IsInput)
+                        {
+                            AddMessage(request.Input);
+                            tcpClient.Close();
+                        }
+                        else
+                        {
+                            GetMessagesResponse response = GetMessages(request.Timestamp);
+                            Console.Write("Waiting for a connection to transfer... ");
+                            tcpClient = tcpListener.AcceptTcpClient();
 
-                        byte[] msg = System.Text.Encoding.ASCII.GetBytes("Thanks i guess?");
-
-                        stream.Write(msg, 0, msg.Length);
+                            response.WriteTo(tcpClient.GetStream());
+                            tcpClient.Close();
+                        }
                     }
-                    tcpClient.Close();
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
                 }
 
             }
@@ -63,6 +68,15 @@ namespace BackendChattApp
             //Retrives the local computers IP from the DNS
             IPAddress[] iPAddresses = Dns.GetHostAddresses(Dns.GetHostName());
             return iPAddresses[3];
+        }
+        static private void AddMessage(InputMessage message)
+        {
+            // adds message to DB
+        }
+        static private GetMessagesResponse GetMessages(Int64 timestamp)
+        {
+            // Retrives messages from DB
+            return new GetMessagesResponse();
         }
     }
 }
