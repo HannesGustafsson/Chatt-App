@@ -122,12 +122,23 @@ namespace backend
                 // Check for end-of-file tag. If it is not there, read
                 // more data.  
                 content = state.sb.ToString();
+
+
+
+
                 if (content.IndexOf("<EOF>") > -1)
                 {
                     // All the data has been read from the
                     // client. Display it on the console.  
+
+                    content = content.Remove(content.Length - 5);
                     Console.WriteLine("Read {0} bytes from socket. \n Data : {1}",
                         content.Length, content);
+
+                    BackendRequest request = BackendRequest.Parser.ParseJson(content);
+
+                    Console.WriteLine(request.Input.MessageToInput);
+
                     // Echo the data back to the client.  
                     Send(handler, content);
                 }

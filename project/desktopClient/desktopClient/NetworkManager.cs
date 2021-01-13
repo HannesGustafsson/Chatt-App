@@ -6,7 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
-
+using System.IO;
+using Google.Protobuf;
 
 namespace desktopClient
 {
@@ -166,7 +167,7 @@ namespace desktopClient
             BackendRequest request = new BackendRequest();
 
             request.IsInput = true;
-            request.Input = new InputMessage()
+            request.Input = new InputMessage
             {
                 IpAddress = Dns.GetHostAddresses(Dns.GetHostName()).ToString(),
                 MessageToInput = new MessageObject()
@@ -176,12 +177,23 @@ namespace desktopClient
                 }
             };
 
-            byte[] byteData = Encoding.ASCII.GetBytes("<EOF>");
-            byteData = Encoding.ASCII.GetBytes("<EOF>");
+            
+
+            byte[] byteData = Encoding.ASCII.GetBytes(JsonFormatter.Default.Format(request) + "<EOF>");
+
+
 
             // Begin sending the data to the remote device.  
             client.BeginSend(byteData, 0, byteData.Length, 0,
                 new AsyncCallback(SendCallback), client);
+            //sendDone.WaitOne();
+
+
+            
+
+            //client.BeginSend(byteData, 0, byteData.Length, 0,
+            //    new AsyncCallback(SendCallback), client);
+
         }
 
         private static void SendCallback(IAsyncResult ar)
@@ -204,6 +216,6 @@ namespace desktopClient
             }
         }
 
-        
+
     }
 }
