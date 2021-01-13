@@ -39,6 +39,7 @@ namespace backend
                         if (request.IsInput)
                         {
                             Console.WriteLine("Message recived adding to DB");
+                            Console.WriteLine(request.Input);
                             AddMessage(request.Input);
                             tcpClient.Close();
                         }

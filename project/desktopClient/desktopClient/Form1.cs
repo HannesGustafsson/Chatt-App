@@ -23,7 +23,7 @@ namespace desktopClient
 
         private void btnSend_Click(object sender, EventArgs e)
         {
-            Program.SendMessage();
+            Program.SendMessage(this.messageInput.Text);
         }
 
         private void messageInput_TextChanged(object sender, EventArgs e)

@@ -24,7 +24,7 @@ namespace desktopClient
             Application.Run(new Form1());
         }
 
-        public static void SendMessage ()
+        public static void SendMessage (string msg)
         {
             BackendRequest request = new BackendRequest();
 
@@ -34,7 +34,7 @@ namespace desktopClient
                 IpAddress = Dns.GetHostAddresses(Dns.GetHostName()).ToString(),
                 MessageToInput = new MessageObject()
                 {
-                    MessageText = "Test text",
+                    MessageText = msg,
                     Timestamp = DateTime.Now.Ticks
                 }
             };
