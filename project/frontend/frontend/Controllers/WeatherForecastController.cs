@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace frontendCsharp.Controllers
+namespace frontend.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -13,7 +13,7 @@ namespace frontendCsharp.Controllers
     {
         private static readonly string[] Summaries = new[]
         {
-            "Bjas", "Bracing", "Blöööö", "Cool", "Mild", "WarmKörv", "Balmy", "Hot", "Sweltering", "Scorching"
+            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
         private readonly ILogger<WeatherForecastController> _logger;

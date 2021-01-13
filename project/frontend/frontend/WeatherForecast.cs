@@ -1,6 +1,6 @@
 using System;
 
-namespace frontendCsharp
+namespace frontend
 {
     public class WeatherForecast
     {
