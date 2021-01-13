@@ -19,12 +19,22 @@ namespace desktopClient
         [STAThread]
         static void Main()
         {
+            //AsynchronousClient.StartClient();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
+            
+
+            //AsynchronousClient client = new AsynchronousClient();
+            
         }
 
-        public static void SendMessage (string msg)
+        public static void SendMessage(string msg)
+        {
+            AsynchronousClient.StartClient(msg);
+        }
+
+        public static void OldSendMessage (string msg)
         {
             BackendRequest request = new BackendRequest();
 

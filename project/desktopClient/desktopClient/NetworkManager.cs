@@ -38,7 +38,7 @@ namespace desktopClient
         // The response from the remote device.  
         private static String response = String.Empty;
 
-        private static void StartClient()
+        public static void StartClient(string msg)
         {
             // Connect to a remote device.  
             try
@@ -46,7 +46,7 @@ namespace desktopClient
                 // Establish the remote endpoint for the socket.  
                 // The name of the
                 // remote device is "host.contoso.com".  
-                IPHostEntry ipHostInfo = Dns.GetHostEntry("host.contoso.com");
+                IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
                 IPAddress ipAddress = ipHostInfo.AddressList[3];
                 IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
 
@@ -60,12 +60,12 @@ namespace desktopClient
                 connectDone.WaitOne();
 
                 // Send test data to the remote device.  
-                Send(client, "This is a test<EOF>");
+                Send(client, msg);
                 sendDone.WaitOne();
 
                 // Receive the response from the remote device.  
-                Receive(client);
-                receiveDone.WaitOne();
+                //Receive(client);
+                //receiveDone.WaitOne();
 
                 // Write the response to the console.  
                 Console.WriteLine("Response received : {0}", response);
@@ -162,7 +162,22 @@ namespace desktopClient
         private static void Send(Socket client, String data)
         {
             // Convert the string data to byte data using ASCII encoding.  
-            byte[] byteData = Encoding.ASCII.GetBytes(data);
+
+            BackendRequest request = new BackendRequest();
+
+            request.IsInput = true;
+            request.Input = new InputMessage()
+            {
+                IpAddress = Dns.GetHostAddresses(Dns.GetHostName()).ToString(),
+                MessageToInput = new MessageObject()
+                {
+                    MessageText = data,
+                    Timestamp = DateTime.Now.Ticks
+                }
+            };
+
+            byte[] byteData = Encoding.ASCII.GetBytes("<EOF>");
+            byteData = Encoding.ASCII.GetBytes("<EOF>");
 
             // Begin sending the data to the remote device.  
             client.BeginSend(byteData, 0, byteData.Length, 0,
@@ -189,10 +204,6 @@ namespace desktopClient
             }
         }
 
-        public static int Main(String[] args)
-        {
-            StartClient();
-            return 0;
-        }
+        
     }
 }
