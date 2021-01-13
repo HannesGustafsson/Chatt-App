@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
 using Google.Protobuf;
+using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace backend
 {
@@ -13,7 +16,9 @@ namespace backend
     {
         static void Main(string[] args)
         {
-            ListenTCP();
+            //ListenTCP();
+            AsynchronousSocketListener.StartListening();
+            
         }
 
         static void ListenTCP()
@@ -31,7 +36,7 @@ namespace backend
                     Console.WriteLine("Connected!");
                     NetworkStream stream = tcpClient.GetStream();
 
-
+                    
 
                     try
                     {
@@ -41,6 +46,7 @@ namespace backend
                             Console.WriteLine("Message recived adding to DB");
                             Console.WriteLine(request.Input);
                             AddMessage(request.Input);
+                            
                             tcpClient.Close();
                         }
                         else
@@ -74,7 +80,7 @@ namespace backend
         }
         static private void AddMessage(InputMessage message)
         {
-            Console.WriteLine("Adding message to DB");
+            Console.WriteLine("Adding message to DB");            
             // adds message to DB
         }
         static private GetMessagesResponse GetMessages(Int64 timestamp)
