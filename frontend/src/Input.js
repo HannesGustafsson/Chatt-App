@@ -5,7 +5,7 @@ const MessageInput = () => {
     return(
     <div>
       <Input defaultValue="start chatting" type="text" size="49"/>
-      <Button className="button" >Send</Button>
+      <Button className="button" type="submit" >Send</Button>
     </div>
     )
 }
