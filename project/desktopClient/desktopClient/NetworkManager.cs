@@ -33,13 +33,14 @@ namespace desktopClient
             new ManualResetEvent(false);
         private static ManualResetEvent sendDone =
             new ManualResetEvent(false);
-        private static ManualResetEvent receiveDone =
+        public static ManualResetEvent receiveDone =
             new ManualResetEvent(false);
 
         // The response from the remote device.  
         private static String response = String.Empty;
+        
 
-        public static void StartClient(string msg)
+        public static void StartClient(string msg, bool isListen)
         {
             // Connect to a remote device.  
             try
@@ -59,21 +60,46 @@ namespace desktopClient
                 client.BeginConnect(remoteEP,
                     new AsyncCallback(ConnectCallback), client);
                 connectDone.WaitOne();
-
                 // Send test data to the remote device.  
-                Send(client, msg);
-                sendDone.WaitOne();
+                
+                if (isListen)
+                {
+                    Console.WriteLine("Starting send");
+                    Send(client, msg, false);
+                    Console.WriteLine("Waiting on sendDone");
+                    sendDone.WaitOne();
+                    Console.WriteLine("sendDone is done");
 
-                // Receive the response from the remote device.  
-                //Receive(client);
-                //receiveDone.WaitOne();
+                    // Receive the response from the remote device.  
+                    Receive(client);
+                    Console.WriteLine("Waiting on reciveDone");
+                    receiveDone.WaitOne();
+                    Console.WriteLine("reciveDone is done");
+                    //foreach (var message in AsynchronousClient.messages.MessageList)
+                    //{
+                    //    Form1.messageLog.Text = Form1.messageLog.Text + message.Alias + new DateTime(long.Parse(message.Timestamp.ToString())) + Environment.NewLine + message.MessageText;
+                    //}
+                }
+                else
+                {
+                    Send(client, msg, true);
+                    Console.WriteLine("Waiting on sendDone");
+                    sendDone.WaitOne();
+                    Console.WriteLine("sendDone is done");
+
+                }
+
+
 
                 // Write the response to the console.  
-                Console.WriteLine("Response received : {0}", response);
-
+                //Console.WriteLine("Stored data is: {0}", Program.messages.ToString());
+                //receiveDone.WaitOne();
+                //Console.WriteLine("StartClient thinks receiveDone is done");
+                Console.WriteLine("Closing sockets...");
                 // Release the socket.  
                 client.Shutdown(SocketShutdown.Both);
                 client.Close();
+                Console.WriteLine("sockets closed...");
 
             }
             catch (Exception e)
@@ -106,6 +132,7 @@ namespace desktopClient
 
         private static void Receive(Socket client)
         {
+            Console.WriteLine("Start of Recive");
             try
             {
                 // Create the state object.  
@@ -115,6 +142,7 @@ namespace desktopClient
                 // Begin receiving the data from the remote device.  
                 client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
                     new AsyncCallback(ReceiveCallback), state);
+                Console.WriteLine("Recive was end of line");
             }
             catch (Exception e)
             {
@@ -124,6 +152,7 @@ namespace desktopClient
 
         private static void ReceiveCallback(IAsyncResult ar)
         {
+            Console.WriteLine("Start of ReciveCallback");
             try
             {
                 // Retrieve the state object and the client socket
@@ -136,6 +165,7 @@ namespace desktopClient
 
                 if (bytesRead > 0)
                 {
+                    Console.WriteLine("ReciveCallback thinks theres more data");
                     // There might be more data, so store the data received so far.  
                     state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
 
@@ -145,13 +175,21 @@ namespace desktopClient
                 }
                 else
                 {
+                    Console.WriteLine("ReciveCallback thinks all data has arrived");
+
                     // All the data has arrived; put it in response.  
                     if (state.sb.Length > 1)
                     {
-                        response = state.sb.ToString();
+                        Console.WriteLine("ReciveCallback has started parsing data");
+                        Program.messages = new GetMessagesResponse();
+                        Program.messages = GetMessagesResponse.Parser.ParseJson(state.sb.ToString());
+                        Console.WriteLine("ReciveCallback is done parsing");
+
                     }
                     // Signal that all bytes have been received.  
+                    Console.WriteLine("ReciveCallback thinks its done");
                     receiveDone.Set();
+                    //Console.WriteLine(receiveDone.GetAccessControl().ToString());
                 }
             }
             catch (Exception e)
@@ -160,21 +198,24 @@ namespace desktopClient
             }
         }
 
-        private static void Send(Socket client, String data)
+        private static void Send(Socket client, String data, bool isInput)
         {
+            Console.WriteLine("Start of Send");
+
             // Convert the string data to byte data using ASCII encoding.  
 
             BackendRequest request = new BackendRequest();
 
-            request.IsInput = true;
+            request.IsInput = isInput;
             request.Input = new InputMessage
             {
                 IpAddress = Dns.GetHostAddresses(Dns.GetHostName()).ToString(),
                 MessageToInput = new MessageObject()
                 {
                     MessageText = data,
-                    Timestamp = DateTime.Now.Ticks
+                    Timestamp = DateTime.Now.Ticks,                    
                 }
+
             };
 
             
@@ -186,10 +227,16 @@ namespace desktopClient
             // Begin sending the data to the remote device.  
             client.BeginSend(byteData, 0, byteData.Length, 0,
                 new AsyncCallback(SendCallback), client);
-            //sendDone.WaitOne();
+            sendDone.WaitOne();
 
 
-            
+            //if (!isInput)
+            //{
+            //    Receive(client);
+            //    Console.WriteLine("Waiting on reciveDone");
+            //    receiveDone.WaitOne();
+            //    Console.WriteLine("reciveDone is done");
+            //}
 
             //client.BeginSend(byteData, 0, byteData.Length, 0,
             //    new AsyncCallback(SendCallback), client);
@@ -198,6 +245,8 @@ namespace desktopClient
 
         private static void SendCallback(IAsyncResult ar)
         {
+            Console.WriteLine("Start of SendCallback");
+
             try
             {
                 // Retrieve the socket from the state object.  
@@ -209,6 +258,8 @@ namespace desktopClient
 
                 // Signal that all bytes have been sent.  
                 sendDone.Set();
+                //Console.WriteLine(sendDone.GetAccessControl().ToString());
+
             }
             catch (Exception e)
             {

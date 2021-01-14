@@ -19,44 +19,21 @@ namespace desktopClient
         [STAThread]
         static void Main()
         {
+            Console.WriteLine("Hello world!");
+            messages = new GetMessagesResponse();
             //AsynchronousClient.StartClient();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
             
-
+            
             //AsynchronousClient client = new AsynchronousClient();
             
         }
-
+        public static GetMessagesResponse messages;
         public static void SendMessage(string msg)
         {
-            AsynchronousClient.StartClient(msg);
-        }
-
-        public static void OldSendMessage (string msg)
-        {
-            BackendRequest request = new BackendRequest();
-
-            request.IsInput = true;
-            request.Input = new InputMessage()
-            {
-                IpAddress = Dns.GetHostAddresses(Dns.GetHostName()).ToString(),
-                MessageToInput = new MessageObject()
-                {
-                    MessageText = msg,
-                    Timestamp = DateTime.Now.Ticks
-                }
-            };
-
-            TcpClient client = new TcpClient(Dns.GetHostName(), 11000);
-            NetworkStream stream = client.GetStream();
-
-            request.WriteTo(stream);
-            Console.WriteLine("Got message");
-
-
-            client.Close();
-        }
+            AsynchronousClient.StartClient(msg, false);
+        }       
     }
 }

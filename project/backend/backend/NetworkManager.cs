@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
-
+using Google.Protobuf;
 
 namespace backend
 {
@@ -71,6 +71,7 @@ namespace backend
                         listener);
 
                     // Wait until a connection is made before continuing.  
+                    Console.WriteLine("Waiting for made connection allDone");
                     allDone.WaitOne();
                 }
 
@@ -97,12 +98,15 @@ namespace backend
             // Create the state object.  
             StateObject state = new StateObject();
             state.workSocket = handler;
+            Console.WriteLine("Begining recive...");
             handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
                 new AsyncCallback(ReadCallback), state);
         }
 
         public static void ReadCallback(IAsyncResult ar)
         {
+            Console.WriteLine("ReadCallback start!");
+
             String content = String.Empty;
 
             // Retrieve the state object and the handler socket  
@@ -115,6 +119,7 @@ namespace backend
 
             if (bytesRead > 0)
             {
+                Console.WriteLine("ReadCallback has started reading data");
                 // There  might be more data, so store the data received so far.  
                 state.sb.Append(Encoding.ASCII.GetString(
                     state.buffer, 0, bytesRead));
@@ -128,6 +133,8 @@ namespace backend
 
                 if (content.IndexOf("<EOF>") > -1)
                 {
+                    Console.WriteLine("ReadCallback found <EOF>");
+
                     // All the data has been read from the
                     // client. Display it on the console.  
 
@@ -140,11 +147,30 @@ namespace backend
                     Console.WriteLine(request.Input.MessageToInput);
 
                     // Echo the data back to the client.  
-                    Send(handler, content);
+
+
+
+
+                    if ( !request.IsInput )
+                    {
+                        Console.WriteLine("request recived is not input");
+                        content = JsonFormatter.Default.Format(Program.GetMessages(request.Timestamp));
+                        Console.WriteLine("begining send of response");
+                        Send(handler, content);
+                    }
+                    else
+                    {
+                        Console.WriteLine("request recived is input skippning send");
+                        Program.AddMessage(request);
+                    }
+
+                    
                 }
+
                 else
                 {
                     // Not all data received. Get more.  
+                    Console.WriteLine("ReadCallback thinks theres more data");
                     handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
                     new AsyncCallback(ReadCallback), state);
                 }
@@ -153,6 +179,7 @@ namespace backend
 
         private static void Send(Socket handler, String data)
         {
+            Console.WriteLine("Begining send");
             // Convert the string data to byte data using ASCII encoding.  
             byte[] byteData = Encoding.ASCII.GetBytes(data);
 
@@ -163,6 +190,8 @@ namespace backend
 
         private static void SendCallback(IAsyncResult ar)
         {
+            Console.WriteLine("Start of SendCallback");
+
             try
             {
                 // Retrieve the socket from the state object.  
@@ -171,7 +200,8 @@ namespace backend
                 // Complete sending the data to the remote device.  
                 int bytesSent = handler.EndSend(ar);
                 Console.WriteLine("Sent {0} bytes to client.", bytesSent);
-
+                
+                Console.WriteLine("SendCallback is closning socket");
                 handler.Shutdown(SocketShutdown.Both);
                 handler.Close();
 

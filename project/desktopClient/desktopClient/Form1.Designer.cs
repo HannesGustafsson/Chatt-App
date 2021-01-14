@@ -37,6 +37,7 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.buttonUpdate = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -69,7 +70,7 @@
             this.messageInput.Location = new System.Drawing.Point(12, 336);
             this.messageInput.Margin = new System.Windows.Forms.Padding(6, 2, 6, 2);
             this.messageInput.Name = "messageInput";
-            this.messageInput.Size = new System.Drawing.Size(327, 22);
+            this.messageInput.Size = new System.Drawing.Size(327, 19);
             this.messageInput.TabIndex = 2;
             this.messageInput.Text = "Input";
             this.messageInput.TextChanged += new System.EventHandler(this.messageInput_TextChanged);
@@ -115,7 +116,7 @@
             this.label1.Location = new System.Drawing.Point(18, 14);
             this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(236, 46);
+            this.label1.Size = new System.Drawing.Size(185, 37);
             this.label1.TabIndex = 6;
             this.label1.Text = "ChattApp";
             // 
@@ -128,11 +129,22 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Other";
             // 
+            // buttonUpdate
+            // 
+            this.buttonUpdate.Location = new System.Drawing.Point(484, 23);
+            this.buttonUpdate.Name = "buttonUpdate";
+            this.buttonUpdate.Size = new System.Drawing.Size(75, 23);
+            this.buttonUpdate.TabIndex = 8;
+            this.buttonUpdate.Text = "Update";
+            this.buttonUpdate.UseVisualStyleBackColor = true;
+            this.buttonUpdate.Click += new System.EventHandler(this.buttonUpdate_Click);
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(601, 521);
+            this.Controls.Add(this.buttonUpdate);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label1);
@@ -153,13 +165,14 @@
         #endregion
 
         private System.Windows.Forms.Button btnSend;
-        private System.Windows.Forms.TextBox messageLog;
+        public System.Windows.Forms.TextBox messageLog;
         private System.Windows.Forms.TextBox messageInput;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Button buttonUpdate;
     }
 }
 
