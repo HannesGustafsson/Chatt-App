@@ -11,6 +11,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using System.Data;
+using Newtonsoft.Json;
 
 namespace backend
 {
@@ -20,13 +21,21 @@ namespace backend
 
         static void Main(string[] args)
         {
+            using (StreamReader r = new StreamReader("name_list.json"))
+            {
+                string json = r.ReadToEnd();
+                List<name> list = new List<name>(JsonConvert.DeserializeObject<List<name>>(json));
+                
+            }
             //ListenTCP();
             DummyThiccArray();
             //AsynchronousSocketListener.StartListening();
 
-            AddMessage(new BackendRequest { Input = new InputMessage { MessageToInput = new MessageObject { MessageText = "Hellow db!", Timestamp = DateTime.Now.Ticks }, IpAddress = "192.168.1.69" } });
+            //AddMessage(new BackendRequest { Input = new InputMessage { MessageToInput = new MessageObject { MessageText = "Hellow db!", Timestamp = DateTime.Now.Ticks }, IpAddress = "192.168.1.69" } });
 
         }
+
+        
 
         static void DummyThiccArray()
         {
@@ -140,6 +149,11 @@ namespace backend
                 {
                     Console.WriteLine("No user was found");
 
+                    Random random = new Random();
+                    random.Next(0, 4945);
+
+                    
+
                     DbUser user = new DbUser("Saaaaanic", message.Input.IpAddress);
 
                     sql = "INSERT INTO users(alias, ip) VALUES('" + user.Alias + "','" + user.Ip + "')";
@@ -202,6 +216,10 @@ namespace backend
             // Retrives messages from DB
             return responseList;
         }
+    }
+    public class name
+    {
+        public string value;
     }
 
     public class DbUser
