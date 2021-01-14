@@ -11,6 +11,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using System.Data;
+using Newtonsoft;
 using Newtonsoft.Json;
 
 namespace backend
@@ -24,7 +25,8 @@ namespace backend
             using (StreamReader r = new StreamReader("name_list.json"))
             {
                 string json = r.ReadToEnd();
-                List<name> list = new List<name>(JsonConvert.DeserializeObject<List<name>>(json));
+                NameList list = JsonConvert.DeserializeObject<NameList>(json);
+                Console.WriteLine(json);
                 
             }
             //ListenTCP();
@@ -217,9 +219,9 @@ namespace backend
             return responseList;
         }
     }
-    public class name
+    public class NameList
     {
-        public string value;
+        public IList<string> names { get; set; }
     }
 
     public class DbUser
