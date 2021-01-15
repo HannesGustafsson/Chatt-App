@@ -38,8 +38,13 @@
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.buttonUpdate = new System.Windows.Forms.Button();
+            this.radioButtonNormal = new System.Windows.Forms.RadioButton();
+            this.radioButtonAngry = new System.Windows.Forms.RadioButton();
+            this.radioButtonDrunk = new System.Windows.Forms.RadioButton();
+            this.radioButtonSarc = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnSend
@@ -122,12 +127,16 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.radioButtonSarc);
+            this.groupBox2.Controls.Add(this.radioButtonDrunk);
+            this.groupBox2.Controls.Add(this.radioButtonAngry);
+            this.groupBox2.Controls.Add(this.radioButtonNormal);
             this.groupBox2.Location = new System.Drawing.Point(439, 96);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(150, 407);
             this.groupBox2.TabIndex = 7;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Other";
+            this.groupBox2.Text = "Mode";
             // 
             // buttonUpdate
             // 
@@ -138,6 +147,48 @@
             this.buttonUpdate.Text = "Update";
             this.buttonUpdate.UseVisualStyleBackColor = true;
             this.buttonUpdate.Click += new System.EventHandler(this.buttonUpdate_Click);
+            // 
+            // radioButtonNormal
+            // 
+            this.radioButtonNormal.AutoSize = true;
+            this.radioButtonNormal.Checked = true;
+            this.radioButtonNormal.Location = new System.Drawing.Point(7, 19);
+            this.radioButtonNormal.Name = "radioButtonNormal";
+            this.radioButtonNormal.Size = new System.Drawing.Size(58, 17);
+            this.radioButtonNormal.TabIndex = 2;
+            this.radioButtonNormal.TabStop = true;
+            this.radioButtonNormal.Text = "Normal";
+            this.radioButtonNormal.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonAngry
+            // 
+            this.radioButtonAngry.AutoSize = true;
+            this.radioButtonAngry.Location = new System.Drawing.Point(7, 42);
+            this.radioButtonAngry.Name = "radioButtonAngry";
+            this.radioButtonAngry.Size = new System.Drawing.Size(52, 17);
+            this.radioButtonAngry.TabIndex = 3;
+            this.radioButtonAngry.Text = "Angry";
+            this.radioButtonAngry.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonDrunk
+            // 
+            this.radioButtonDrunk.AutoSize = true;
+            this.radioButtonDrunk.Location = new System.Drawing.Point(7, 65);
+            this.radioButtonDrunk.Name = "radioButtonDrunk";
+            this.radioButtonDrunk.Size = new System.Drawing.Size(54, 17);
+            this.radioButtonDrunk.TabIndex = 4;
+            this.radioButtonDrunk.Text = "Drunk";
+            this.radioButtonDrunk.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonSarc
+            // 
+            this.radioButtonSarc.AutoSize = true;
+            this.radioButtonSarc.Location = new System.Drawing.Point(7, 88);
+            this.radioButtonSarc.Name = "radioButtonSarc";
+            this.radioButtonSarc.Size = new System.Drawing.Size(69, 17);
+            this.radioButtonSarc.TabIndex = 5;
+            this.radioButtonSarc.Text = "Sarcastic";
+            this.radioButtonSarc.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -157,6 +208,8 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -173,6 +226,10 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button buttonUpdate;
+        private System.Windows.Forms.RadioButton radioButtonDrunk;
+        private System.Windows.Forms.RadioButton radioButtonAngry;
+        private System.Windows.Forms.RadioButton radioButtonNormal;
+        private System.Windows.Forms.RadioButton radioButtonSarc;
     }
 }
 
