@@ -35,6 +35,7 @@ namespace desktopClient
                 messageLog.Text = messageLog.Text + message.Alias + new DateTime(long.Parse(message.Timestamp.ToString())) + Environment.NewLine + message.MessageText + Environment.NewLine;
             }
             AsynchronousClient.receiveDone = new ManualResetEvent(false);
+
         }
         private void btnSend_Click(object sender, EventArgs e)
         {

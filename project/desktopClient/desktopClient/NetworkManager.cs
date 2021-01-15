@@ -64,11 +64,13 @@ namespace desktopClient
                 
                 if (isListen)
                 {
-                    Console.WriteLine("Starting send");
+                    Console.WriteLine("Starting send, timestamp: " + Program.clientTimestamp);
                     Send(client, msg, false);
                     Console.WriteLine("Waiting on sendDone");
                     sendDone.WaitOne();
-                    Console.WriteLine("sendDone is done");
+                    Program.clientTimestamp = DateTime.Now.Ticks;
+                    Console.WriteLine("sendDone is done new timestamp: " + Program.clientTimestamp);
+                    
 
                     // Receive the response from the remote device.  
                     Receive(client);
@@ -207,16 +209,21 @@ namespace desktopClient
             BackendRequest request = new BackendRequest();
 
             request.IsInput = isInput;
+            request.Timestamp = Program.clientTimestamp;
             request.Input = new InputMessage
             {
-                IpAddress = Dns.GetHostAddresses(Dns.GetHostName()).ToString(),
+                //IpAddress =  Dns.GetHostAddresses(Dns.GetHostName())[3].Address.ToString(),
+                IpAddress = Program.GetBigMac(),                
                 MessageToInput = new MessageObject()
                 {
                     MessageText = data,
-                    Timestamp = DateTime.Now.Ticks,                    
+                    Timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds(),                    
                 }
 
+                
+
             };
+            
 
             
 

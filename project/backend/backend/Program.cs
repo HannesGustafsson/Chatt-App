@@ -19,25 +19,32 @@ namespace backend
     class Program
     {
         static GetMessagesResponse responseList;
+        static NameList list;
 
         static void Main(string[] args)
         {
             using (StreamReader r = new StreamReader("name_list.json"))
             {
                 string json = r.ReadToEnd();
-                NameList list = JsonConvert.DeserializeObject<NameList>(json);
-                Console.WriteLine(json);
-                
+                list = JsonConvert.DeserializeObject<NameList>(json);
             }
+
+            //string tempName = RandomName();
+
             //ListenTCP();
-            DummyThiccArray();
+            //DummyThiccArray();
             //AsynchronousSocketListener.StartListening();
+
+            //GetMessages(0);
+            //GetMessages(1);
+            //Console.WriteLine(DateTimeOffset.Now.ToUnixTimeMilliseconds());
+            //Console.WriteLine(DateTimeOffset.Now.ToUnixTimeSeconds());
 
             //AddMessage(new BackendRequest { Input = new InputMessage { MessageToInput = new MessageObject { MessageText = "Hellow db!", Timestamp = DateTime.Now.Ticks }, IpAddress = "192.168.1.69" } });
 
         }
 
-        
+
 
         static void DummyThiccArray()
         {
@@ -49,72 +56,16 @@ namespace backend
                 {
                     MessageText = i + " message YOOO!!",
                     Alias = "James den store",
-                    Timestamp = DateTime.Now.Ticks
+                    Timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds()
 
                 });
             }
 
         }
 
-        static void ListenTCP()
-        {
-            try
-            {
-                TcpListener tcpListener = new TcpListener(GetLocalIP(), 11000);
-                tcpListener.Start();
-
-                while (true)
-                {
-                    BackendRequest request = new BackendRequest();
-                    Console.Write("Waiting for a connection... ");
-                    TcpClient tcpClient = tcpListener.AcceptTcpClient();
-                    Console.WriteLine("Connected!");
-                    NetworkStream stream = tcpClient.GetStream();
-
-
-
-                    try
-                    {
-                        request = BackendRequest.Parser.ParseFrom(stream);
-                        if (request.IsInput)
-                        {
-                            Console.WriteLine("Message recived adding to DB");
-                            Console.WriteLine(request.Input);
-                            AddMessage(request);
-
-                            tcpClient.Close();
-                        }
-                        else
-                        {
-                            GetMessagesResponse response = GetMessages(request.Timestamp);
-                            Console.WriteLine("Waiting for a connection to transfer... ");
-                            tcpClient = tcpListener.AcceptTcpClient();
-
-                            response.WriteTo(tcpClient.GetStream());
-                            Console.WriteLine("Transfer Complete closing stream");
-                            tcpClient.Close();
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
-                    }
-                }
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-        }
-        static private IPAddress GetLocalIP()
-        {
-            //Retrives the local computers IP from the DNS
-            IPAddress[] iPAddresses = Dns.GetHostAddresses(Dns.GetHostName());
-            return iPAddresses[3];
-        }
         static public void AddMessage(BackendRequest message)
         {
+            Console.WriteLine(message.Input.IpAddress);
             Console.WriteLine("Adding message to DB");
             responseList.MessageList.Add(message.Input.MessageToInput);
             string connString = "server=127.0.0.1;uid=root;" + "pwd=P@55w.rd;database=chattapp";
@@ -146,17 +97,19 @@ namespace backend
                 {
                     int a = userList[0].Iduser;
                     Console.WriteLine("id user: " + a.ToString());
+
+                    sql = "INSERT INTO messages(message, timestamp, iduser) VALUES('" + message.Input.MessageToInput.MessageText + "','" + message.Timestamp + "','" + a + "')";
+                    cmd = new MySqlCommand(sql, conn);
+                    reader = cmd.ExecuteReader();
+                    while (reader.Read()) { }
+                    reader.Close();
+
                 }
                 else
                 {
                     Console.WriteLine("No user was found");
 
-                    Random random = new Random();
-                    random.Next(0, 4945);
-
-                    
-
-                    DbUser user = new DbUser("Saaaaanic", message.Input.IpAddress);
+                    DbUser user = new DbUser(RandomName(), message.Input.IpAddress);
 
                     sql = "INSERT INTO users(alias, ip) VALUES('" + user.Alias + "','" + user.Ip + "')";
                     cmd = new MySqlCommand(sql, conn);
@@ -173,6 +126,13 @@ namespace backend
                         userList.Add(user);
                     }
                     reader.Close();
+
+                    sql = "INSERT INTO messages(message, timestamp, iduser) VALUES('" + message.Input.MessageToInput.MessageText + "','" + message.Timestamp + "','" + userList[0].Iduser + "')";
+                    cmd = new MySqlCommand(sql, conn);
+                    reader = cmd.ExecuteReader();
+                    while (reader.Read()) { }
+                    reader.Close();
+                    responseList.MessageList.Add(new MessageObject { Alias = user.Alias, MessageText = message.Input.MessageToInput.MessageText, Timestamp = message.Timestamp });
 
 
                 }
@@ -212,11 +172,77 @@ namespace backend
             //    }
             //}
         }
+
         static public GetMessagesResponse GetMessages(Int64 timestamp)
         {
-            Console.WriteLine("Writing message to DB");
+            Console.WriteLine("Getting message from DB");
+            string sql = "";
+            responseList = new GetMessagesResponse();
             // Retrives messages from DB
+            string connString = "server=127.0.0.1;uid=root;" + "pwd=P@55w.rd;database=chattapp";
+            MySqlConnection conn = new MySqlConnection(connString);
+            if (timestamp == 0)
+            {
+                sql = "SELECT users.alias, messages.message, messages.timestamp FROM users INNER JOIN messages ON users.iduser = messages.iduser ORDER BY messages.timestamp";
+            }
+            else
+            {
+                sql = "SELECT users.alias, messages.message, messages.timestamp FROM users INNER JOIN messages ON users.iduser = messages.iduser WHERE messages.timestamp > " + timestamp + " ORDER BY messages.timestamp";
+            }
+
+
+            MySqlCommand cmd = new MySqlCommand(sql, conn);
+            conn.Open();
+            MySqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                Console.WriteLine(reader.GetString("message") + reader.GetInt32("timestamp").ToString() + reader.GetString("alias"));
+                responseList.MessageList.Add(new MessageObject { Alias = reader.GetString("alias"), MessageText = reader.GetString("message"), Timestamp = reader.GetInt32("timestamp") });
+            }
+            reader.Close();
+
+
             return responseList;
+        }
+
+        // Returns randomized user alias after checking if it is available in database
+        static public string RandomName()
+        {
+            bool unique = false;
+            string name = "";
+            while (!unique)
+            {
+                Random random = new Random();
+                name = list.names[random.Next(0, list.names.Count - 1)] + " " + list.names[random.Next(0, list.names.Count - 1)];
+                string user = "";
+
+                string connString = "server=127.0.0.1;uid=root;" + "pwd=P@55w.rd;database=chattapp";
+                MySqlConnection conn = new MySqlConnection(connString);
+
+                try
+                {
+                    string sql = "SELECT * FROM users WHERE alias='" + name + "'";
+                    MySqlCommand cmd = new MySqlCommand(sql, conn);
+                    conn.Open();
+                    MySqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        user = user + reader.GetString("alias");
+                    }
+                    reader.Close();
+                    if (user.Length == 0)
+                    {
+                        unique = true;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+            }
+
+            return name;
+
         }
     }
     public class NameList
