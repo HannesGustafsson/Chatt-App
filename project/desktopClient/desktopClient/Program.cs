@@ -49,6 +49,11 @@ namespace desktopClient
             .Select(nic => nic.GetPhysicalAddress().ToString())
             .FirstOrDefault(); ;
         }
+        /// <summary>
+        /// Function for converting to Datetime from long Timestamp
+        /// </summary>
+        /// <param name="unixtime"></param>
+        /// <returns></returns>
         public static DateTime UnixTimeToDateTime(long unixtime)
         {
             System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
