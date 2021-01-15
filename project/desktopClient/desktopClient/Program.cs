@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Net.Sockets;
-using System.Net;
-using Google.Protobuf;
 using System.Net.NetworkInformation;
 
 namespace desktopClient
@@ -21,21 +16,31 @@ namespace desktopClient
             Console.WriteLine("Hello world!");
             clientTimestamp = 0;
             messages = new GetMessagesResponse();
-            //AsynchronousClient.StartClient();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
-
-
-            //AsynchronousClient client = new AsynchronousClient();
-
         }
+        /// <summary>
+        /// Storage varible for messages for Form1 to populate list
+        /// </summary>
         public static GetMessagesResponse messages;
+        /// <summary>
+        /// Storage variable for timestamp for determining latest update of messageLog
+        /// </summary>
         public static long clientTimestamp;
+        /// <summary>
+        /// Starts the AsynchronousClient for sending the message
+        /// </summary>
+        /// <param name="msg"></param>
         public static void SendMessage(string msg)
         {
             AsynchronousClient.StartClient(msg, false);
         }
+
+        /// <summary>
+        /// Returns client's mac-address / Bigmac
+        /// </summary>
         public static string GetBigMac()
         {
             return NetworkInterface

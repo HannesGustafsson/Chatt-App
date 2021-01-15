@@ -1,45 +1,41 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 
 namespace desktopClient
 {
+    /// <summary>
+    /// Main Form for the application.
+    /// </summary>
     public partial class Form1 : Form
-    {
-        string serverIp = "localhost";
-        int port = 2222;
-
+    {        
         public Form1()
         {
             InitializeComponent();
-            
-            
-            Populate();
-            
-            
+            Populate(); //Begins populating the form with the latest messages sent.
         }
+        /// <summary>
+        /// Populates the messageLog with the data retrived from the server
+        /// </summary>
         public void Populate()
         {
+            Console.WriteLine("Populate thinks the time is: " + Program.clientTimestamp.ToString());
             AsynchronousClient.StartClient("", true);
-            messageLog.Text = "";
             foreach (var message in Program.messages.MessageList)
             {
-                messageLog.Text = messageLog.Text + message.Alias + new DateTime(long.Parse(message.Timestamp.ToString())) + Environment.NewLine + message.MessageText + Environment.NewLine;
+                messageLog.Text =  message.Alias + message.Timestamp.ToString() + Environment.NewLine + message.MessageText + Environment.NewLine + messageLog.Text;                
             }
             AsynchronousClient.receiveDone = new ManualResetEvent(false);
-
+            Console.WriteLine("Populate after doing it's thing now thinks the time is: " + Program.clientTimestamp.ToString());
         }
         private void btnSend_Click(object sender, EventArgs e)
         {
+            Console.WriteLine("Send button thinks the time is: " + Program.clientTimestamp.ToString());
             Program.SendMessage(this.messageInput.Text);
+            //AsynchronousClient.sendDone.WaitOne();
+            ////After the message has been sent, refreshes the messageLog.
+            //Populate();
         }
 
         private void messageInput_TextChanged(object sender, EventArgs e)

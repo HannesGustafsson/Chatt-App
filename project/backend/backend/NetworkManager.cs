@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
 using Google.Protobuf;
@@ -96,8 +93,7 @@ namespace backend
             Socket handler = listener.EndAccept(ar);
 
             // Create the state object.  
-            StateObject state = new StateObject();
-            state.workSocket = handler;
+            StateObject state = new StateObject { workSocket = handler };            
             Console.WriteLine("Begining recive...");
             handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
                 new AsyncCallback(ReadCallback), state);
@@ -145,6 +141,11 @@ namespace backend
                     BackendRequest request = BackendRequest.Parser.ParseJson(content);
 
                     Console.WriteLine(request.Input.MessageToInput);
+
+                    //request.Timestamp;
+                    //request.Input.MessageToInput.Timestamp;
+                    
+
 
                     // Echo the data back to the client.  
 
