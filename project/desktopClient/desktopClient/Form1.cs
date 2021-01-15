@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 
@@ -15,6 +16,7 @@ namespace desktopClient
         {
             InitializeComponent();
             Populate(); //Begins populating the form with the latest messages sent.
+            Heartbeat(); //Starts hearbeat for automatik update
         }
         /// <summary>
         /// Populates the messageLog with the data retrived from the server
@@ -33,7 +35,7 @@ namespace desktopClient
         }
         private void btnSend_Click(object sender, EventArgs e)
         {
-            // Sacrcastify message if Sarcastic button is checked
+            // If Sarcastic is checked, sarcastify message
             if (this.radioButtonSarc.Checked)
             {
                 Random random = new Random();
@@ -51,7 +53,7 @@ namespace desktopClient
                 }
                 this.messageInput.Text = s;
             }
-            //
+            // If angry is checked, ragify message
             else if (this.radioButtonAngry.Checked)
             {
                 string s = "";
@@ -61,6 +63,7 @@ namespace desktopClient
                 }
                 this.messageInput.Text = s + "!!1!";
             }
+            // If drunk is checked, ragify message
             else if (this.radioButtonDrunk.Checked)
             {
                 Random random = new Random();
@@ -82,10 +85,8 @@ namespace desktopClient
             Console.WriteLine("Send button thinks the time is: " + Program.clientTimestamp.ToString());
             Program.SendMessage(this.messageInput.Text);
             this.messageInput.Text = "";
+            //After the message has been sent, refreshes the messageLog.
             Populate();
-            //AsynchronousClient.sendDone.WaitOne();
-            ////After the message has been sent, refreshes the messageLog.
-            //Populate();
         }
 
         private void messageInput_TextChanged(object sender, EventArgs e)
@@ -101,6 +102,21 @@ namespace desktopClient
         private void buttonUpdate_Click(object sender, EventArgs e)
         {
             Populate();
+        }
+        /// <summary>
+        /// Heartbeat task for passive updates of messages
+        /// </summary>
+        /// <returns></returns>
+        async Task<bool> Heartbeat()
+        {
+            bool stopit = false;
+            while (!stopit)
+            {
+                await Task.Delay(5000);
+                Console.WriteLine("Heartbeat time!");
+                this.Populate();
+            }
+            return stopit;
         }
     }
 }

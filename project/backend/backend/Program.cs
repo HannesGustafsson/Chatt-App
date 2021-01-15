@@ -28,6 +28,9 @@ namespace backend
         /// </summary>
         static public void AddMessage(BackendRequest message)
         {
+            // Trim illegal characters to prevent SQL injection and the like            
+            message.Input.MessageToInput.MessageText = message.Input.MessageToInput.MessageText.Replace("'", "");
+            
             Console.WriteLine(message.Input.IpAddress);
             Console.WriteLine("Adding message to DB");
             responseList.MessageList.Add(message.Input.MessageToInput);

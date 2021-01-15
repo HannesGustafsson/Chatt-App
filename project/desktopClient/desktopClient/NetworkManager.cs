@@ -61,12 +61,9 @@ namespace desktopClient
 
                 if (isListen)
                 {
-                    Console.WriteLine("StartClient thinks the time is: " + Program.clientTimestamp.ToString());
                     Send(client, msg, false);
                     sendDone.WaitOne();
-                    Program.clientTimestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-                    //Program.clientTimestamp = 1610730982119;
-                    Console.WriteLine("StartClient set the time to: " + Program.clientTimestamp.ToString());
+                    Program.clientTimestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();                    
 
                     // Receive the response from server 
                     Receive(client);
@@ -121,7 +118,6 @@ namespace desktopClient
         /// <param name="client"></param>
         private static void Receive(Socket client)
         {
-            Console.WriteLine("Start of Recive");
             try
             {
                 // Create the state object
@@ -131,7 +127,6 @@ namespace desktopClient
                 // Begin receiving the data from server  
                 client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
                     new AsyncCallback(ReceiveCallback), state);
-                Console.WriteLine("Recive was end of line");
             }
             catch (Exception e)
             {
@@ -191,10 +186,8 @@ namespace desktopClient
         /// <param name="isInput"></param>
         private static void Send(Socket client, String data, bool isInput)
         {
-            Console.WriteLine("Send function thinks the time is: " + Program.clientTimestamp.ToString());
             // Convert the string data to byte data using ASCII encoding.  
             BackendRequest request = new BackendRequest();
-
             request.IsInput = isInput;
             request.Timestamp = Program.clientTimestamp;
             request.Input = new InputMessage
@@ -210,11 +203,9 @@ namespace desktopClient
             byte[] byteData = Encoding.ASCII.GetBytes(JsonFormatter.Default.Format(request) + "<EOF>");
 
             // Begin sending the data to the remote device.  
-            Console.WriteLine("Send function thinks the time is: " + Program.clientTimestamp.ToString() + " when it starts sending");
             client.BeginSend(byteData, 0, byteData.Length, 0,
                 new AsyncCallback(SendCallback), client);
             sendDone.WaitOne();
-            Console.WriteLine("Send function thinks the time is: " + Program.clientTimestamp.ToString() + " when it is done sending");
         }
 
         /// <summary>
@@ -243,5 +234,7 @@ namespace desktopClient
                 Console.WriteLine(e.ToString());
             }
         }
+
+        
     }
 }
